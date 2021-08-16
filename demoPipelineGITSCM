@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('DevBuildTest') {
+            steps {
+                echo 'Initiated Development Chain Job'
+				build quietPeriod: 5, job: 'devDemoJob'
+				echo 'Chain Job: Development Finish'
+				echo 'Chain Job: Build Finish'
+				echo 'Chain Job: Testing Completes'
+				echo 'Ready to Deploy'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Initiate Deploy Job'
+				build quietPeriod: 5, job: 'deployDemoJob'
+				echo 'Job: Deployment Finish'
+            }
+        }
+		stage('GITDownload') {
+            steps {
+                echo 'Initiate GIT Download'
+				build quietPeriod: 3, job: 'ec2JenkinsDemoProject'
+				echo 'Job: Download from GIT to EC2'
+				echo 'Job: GIT Download Finish'
+				echo 'Jobs Completed'
+            }
+        }
+	}
+}
